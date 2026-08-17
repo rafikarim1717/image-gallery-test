@@ -69,12 +69,19 @@ services:
     container_name: image-gallery-frontend
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      INTERNAL_API_URL: ${INTERNAL_API_URL}
     ports:
       - "3000:3000"
     depends_on:
       - backend
     volumes:
       - ./frontend:/app
+      # Anonymous volumes: without these, the bind mount above shadows the
+      # container's own /app/node_modules with whatever is on the Windows
+      # host (built for win32, not linux-musl — Tailwind's native lightningcss
+      # binary fails to load). These two paths stay container-only instead.
+      - /app/node_modules
+      - /app/.next
 
 volumes:
   postgres_data:
