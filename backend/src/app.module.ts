@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { ImagesModule } from './images/images.module';
+import { MinioService } from './minio/minio.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -18,8 +20,21 @@ import { AppService } from './app.service';
       logging: true,
     }),
     AuthModule,
+    ImagesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, MinioService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private minioService: MinioService) {
+    this.initializeMinio();
+  }
+
+  private async initializeMinio() {
+    try {
+      await this.minioService.initBucket();
+    } catch (error) {
+      console.error('MinIO initialization failed:', error);
+    }
+  }
+}
