@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../users/entities/user.entity';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -13,9 +15,13 @@ export class AuthService {
   ) {}
 
   async register(email: string, name: string, password: string) {
-    // Validation
+    // Validation (A3): required fields, valid email, minimum 8 char password
     if (!email || !name || !password) {
       throw new BadRequestException('All fields required');
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      throw new BadRequestException('Invalid email format');
     }
 
     if (password.length < 8) {
