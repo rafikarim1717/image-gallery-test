@@ -53,6 +53,7 @@ services:
       MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
       JWT_SECRET: ${JWT_SECRET}
       NODE_ENV: ${NODE_ENV}
+      FRONTEND_URL: ${FRONTEND_URL}
     ports:
       - "8000:8000"
     depends_on:
