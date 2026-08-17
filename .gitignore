@@ -1,8 +1,9 @@
 # Dependencies
 node_modules/
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
+# Lockfiles ARE committed (see backend/ and frontend/) so `npm install`
+# resolves the same versions in Docker as on a dev machine. Not ignoring
+# yarn.lock/pnpm-lock.yaml either — neither package manager is in use, but
+# if that ever changes the resulting lockfile should be committed too.
 
 # Environment
 .env
